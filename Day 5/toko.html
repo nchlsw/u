@@ -1,0 +1,28 @@
+<script>
+  const mainMenu = ["Admin", "User", "Exit"];
+  const adminMenu = ["Create", "Show", "Delete", "Edit", "Back"];
+  const itemName = ["Apple", "Mango", "Berry"];
+  const itemPrice = [5000, 6000, 7000];
+  const itemQty = [0, 0, 0];
+
+  const showMainMenu = (isPrompt = false) => {
+    let showMenu = `Log in as : \n`;
+    for (let i = 0; i < mainMenu.length; i++) {
+      showMenu += `${i + 1}. ${mainMenu[i]} \n`;
+    }
+
+    let mainMenuInput;
+    if (isPrompt) {
+      do {
+        mainMenuInput = prompt(showMenu);
+        mainMenuInput = parseInt(mainMenuInput);
+      } while (
+        !(mainMenuInput == 1 || mainMenuInput == 2 || mainMenuInput == 3)
+      );
+
+      let mainMenuInputIndex = mainMenuInput - 1;
+      return mainMenuInputIndex;
+    }
+  };
+  showMainMenu(true);
+</script>

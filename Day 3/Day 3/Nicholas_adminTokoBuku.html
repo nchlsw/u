@@ -1,0 +1,26 @@
+<script>
+  const books = [
+    "LOTR", //0
+    "Harry Potter", //1
+    "Sherlock", //2
+    "Naruto", //3
+    "One Piece", //4
+    "Doraemon", //5
+  ];
+
+  do {
+    let menu = "Menu : \n";
+
+    for (i = 0; i < books.length; i++) {
+      menu += `${i + 1}. ${books[i]} \n`;
+    }
+
+    let addBook = prompt(menu);
+
+    if (addBook == "" || addBook == null || addBook == undefined) {
+      break;
+    }
+
+    books.push(addBook);
+  } while (true);
+</script>

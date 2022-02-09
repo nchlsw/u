@@ -1,0 +1,84 @@
+<script>
+  // Create
+  // Read
+  // Update
+  // Delete
+
+  // 1. tampilkan menu
+  // 1. Tambah data
+  // 2. Delete data
+  // 3. Show data
+
+  // jika user pilih menu 1
+  // berikan prompt untuk nama barang atau data
+  // Kalau user ok atau sudah input barang -> kembali ke menu awal
+
+  // Jika user pilih menu 2 (delete data)
+  // Kasih prompt dengan list data yang ada
+  // User pilih barang dengan nomor list yang ada di prompt
+  // Jika user pilih sebuah adata, hapus data tersebut dari array (gunakan splice)
+
+  // Jika user pilih menu 3 (show data)
+  // kasih alert dengan list data yang ada
+
+  // const menuOptions = ["Add Data", "Delete Data", "Show Data"];
+  // const animeData = ["Naruto", "Bleach", "One Piece", "Dragon Ball"];
+
+  //   let menu = "Menu:  \n";
+  // for (let i = 0; i < menuOptions.length; i++) {
+  //   menu += `${i + 1}. ${menuOptions[i]} \n`;
+  // }
+  //   menu += `${menuOptions.length + 1}. Exit `;
+
+  //   do {
+  //     let menuUserInput = prompt(menu);
+  //     menuUserInput = parseInt(menuUserInput);
+  //     if (menuUserInput == menuOptions.length + 1) {
+  //       break;
+  //     }
+  //     let userMenuInputIndex = menuUserInput - 1;
+
+  //     let addData = menuOptions[userMenuInputIndex];
+  //     let deleteData = menuOptions[userMenuInputIndex];
+  //     let showData = menuOptions[userMenuInputIndex];
+
+  //     let addAnimeData = prompt("Add new anime data :");
+
+  //   } while (true);
+
+  const animeData = ["Naruto", "Bleach", "One Piece", "Dragon Ball"];
+  do {
+    let menu;
+    do {
+      menu = prompt(`Menu :
+        1. Add Data
+        2. Delete Data
+        3. Show Data
+        4. Exit`);
+    } while (!(menu == 1 || menu == 2 || menu == 3 || menu == 4));
+
+    if (menu == 1) {
+      let addData = prompt("Add new data:");
+      animeData.push(addData);
+      alert("Data successfully added");
+    } else if (menu == 2) {
+      let deleteData = "Select anime to delete : \n";
+      for (i = 0; i < animeData.length; i++) {
+        deleteData += `${i + 1}. ${animeData[i]} \n`;
+      }
+      let userInput = prompt(deleteData);
+      userInput = parseInt(userInput);
+      userInputIndex = userInput - 1;
+      animeData.splice(userInputIndex, 1);
+      alert("Data successfully deleted.");
+    } else if (menu == 3) {
+      let showList = "";
+      for (i = 0; i < animeData.length; i++) {
+        showList += `${i + 1}. ${animeData[i]} \n`;
+      }
+      alert(`List of anime: \n ${showList} \n`);
+    } else if (menu == 4) {
+      break;
+    }
+  } while (true);
+</script>

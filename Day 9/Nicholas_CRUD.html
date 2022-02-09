@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRUD</title>
+  </head>
+  <body>
+    <!--to add border with css-->
+    <style>
+      table,
+      td,
+      th {
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+    </style>
+
+    <table>
+      <!-- table header-->
+      <thead>
+        <!-- table row -->
+        <tr>
+          <th>No.</th>
+          <th>Name</th>
+          <th>Occupation</th>
+          <th>Gender</th>
+          <th>Age</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <!--body table -->
+      <tbody id="tableData">
+        <!--to fill content-->
+      </tbody>
+      <!-- Footer Table-->
+      <tfoot>
+        <tr>
+          <td></td>
+          <td>
+            <input id="nameInput" type="text" />
+          </td>
+          <td>
+            <select name="" id="occupationInput">
+              <option>Software Developer</option>
+              <option>Digital Marketer</option>
+              <option>UI/UX</option>
+              <option>Data Scientist</option>
+            </select>
+            <!-- <input id="occupationInput" type="text" /> -->
+          </td>
+          <td>
+            <label for="genderM">
+              <input
+                checked
+                name="gender"
+                type="radio"
+                value="Male"
+                id="genderM"
+              />
+              Male
+            </label>
+
+            <!--label is used so the user can click on the label (easier user experience)-->
+            <label for="genderF">
+              <input name="gender" type="radio" value="Female" id="genderF" />
+              Female
+            </label>
+          </td>
+          <td><input type="text" id="age" /></td>
+          <td>
+            <button onclick="addData()">Add</button>
+          </td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <script>
+      class Person {
+        constructor({ fullName, occupation, gender, age }) {
+          this.fullName = fullName;
+          this.occupation = occupation;
+          this.gender = gender;
+          this.age = age;
+        }
+      }
+
+      let data = [
+        new Person({
+          fullName: "Mark",
+          age: 20,
+          gender: "Male",
+          occupation: "Software Developer",
+        }),
+        new Person({
+          fullName: "Steve",
+          age: 25,
+          gender: "Male",
+          occupation: "CEO",
+        }),
+        new Person({
+          fullName: "Bill",
+          age: 20,
+          gender: "Male",
+          occupation: "UI/UX",
+        }),
+        new Person({
+          fullName: "Seto",
+          age: 20,
+          gender: "Male",
+          occupation: "Data Scientist",
+        }),
+      ];
+
+      const renderData = () => {
+        let htmlResult = "";
+        data.forEach((val, idx) => {
+          htmlResult += `
+                <tr>
+                  <td>${idx + 1}.</td>
+                  <td>${val.fullName}</td>
+                  <td>${val.occupation}</td>
+                  <td>${val.age}</td>
+                  <td>${val.gender}</td>
+                  <td><button onclick="deleteData(${idx})">Delete</button></td>
+                </tr>
+                `;
+        });
+
+        document.getElementById("tableData").innerHTML = htmlResult;
+      };
+
+      renderData();
+
+      const addData = () => {
+        const fullNameInput = document.getElementById("nameInput").value;
+        const occupationInput =
+          document.getElementById("occupationInput").value;
+        let ageInput = document.getElementById("age").value;
+        const isMaleChecked = document.getElementById("genderM").checked;
+        const isFemaleChecked = document.getElementById("genderF").checked;
+
+        let gender;
+        if (isMaleChecked) {
+          gender = "Male";
+        } else if (isFemaleChecked) {
+          gender = "Female";
+        }
+        //input validation
+
+        if (!fullNameInput || !occupationInput) {
+          alert("Both field must be filled!");
+          return;
+        }
+        const newPerson = new Person(fullNameInput, occupationInput, gender);
+
+        data.push(newPerson);
+
+        //to show the newest data
+        renderData();
+
+        document.getElementById("nameInput").value = "";
+      };
+      const deleteData = (deleteIdx) => {
+        data.splice(deleteIdx, 1);
+
+        renderData();
+      };
+    </script>
+  </body>
+</html>

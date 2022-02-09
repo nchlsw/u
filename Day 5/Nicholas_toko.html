@@ -1,0 +1,189 @@
+<script>
+  // Main menu
+  // login sebagai :
+  // 1. admin
+  // 2. user
+  // 3. exit
+
+  // Admin
+  // 1. Create
+  // 2. Show
+  // 3. Delete
+  // 4. Edit
+  // 5. Back
+  // * report
+  // product * qty sold * price
+  // total price sold
+
+  // User
+  // 1. Add to cart
+  // 2. Show cart
+  // 3. Check out
+  // 4. Back
+
+  // Add to cart
+  // Show product
+  // Product qty
+
+  // Check out
+  // Show cart
+  // Payment
+  // 1. Payment > total (alert kembalian)
+  // 2. Payment < total (alert kurang)
+  // 3. Payment = total (thank you)
+
+  const mainMenu = ["Admin", "User", "Exit"];
+  const adminMenu = ["Create", "Show", "Delete", "Edit", "Back"];
+  const userMenu = ["Add to cart", "Show cart", "Check out", "Back"];
+  const itemName = ["Apple", "Mango", "Berry"];
+  const itemPrice = [5000, 6000, 7000];
+  const itemQty = [0, 0, 0];
+
+  let mainMenuInput;
+  let adminDataInput;
+  let adminDataInputIndex;
+  let showData;
+  let showDataOnly;
+  let showUserDataOnly;
+  let userDataInput;
+  let userDataInputIndex;
+  let addItem;
+  let userSelectedItem;
+  let userItemPrice;
+  let userItemQty;
+  let userCart;
+
+  const showMainMenu = (isPrompt = false) => {
+    let showMenu = `Log in as : \n`;
+    for (let i = 0; i < mainMenu.length; i++) {
+      showMenu += `${i + 1}. ${mainMenu[i]} \n`;
+    }
+
+    if (isPrompt) {
+      do {
+        mainMenuInput = prompt(showMenu);
+        mainMenuInput = parseInt(mainMenuInput);
+      } while (
+        !(mainMenuInput == 1 || mainMenuInput == 2 || mainMenuInput == 3)
+      );
+      let mainMenuInputIndex = mainMenuInput - 1;
+      return mainMenuInputIndex;
+    }
+  };
+  const showAdminData = (isPrompt = false) => {
+    showData = `List of items : \n`;
+    for (let i = 0; i < itemName.length; i++) {
+      showData += `${i + 1}. ${itemName[i]} || Rp. ${itemPrice[
+        i
+      ].toLocaleString()} || ${itemQty[i]} \n`;
+    }
+    if (isPrompt) {
+      adminDataInput = prompt(showData);
+      adminDataInput = parseInt(adminDataInput);
+    }
+    adminDataInputIndex = adminDataInput - 1;
+    return adminDataInputIndex;
+  };
+
+  const showAdminDataOnly = (isPrompt = false) => {
+    showDataOnly = `Select your Item : \n`;
+    for (let i = 0; i < itemName.length; i++) {
+      showDataOnly += `${i + 1}. ${itemName[i]} || Rp. ${itemPrice[
+        i
+      ].toLocaleString()} || ${itemQty[i]} \n`;
+    }
+    if (isPrompt) {
+      userDataInput = prompt(showDataOnly);
+      userDataInput = parseInt(userDataInput);
+    }
+    userDataInputIndex = userDataInput - 1;
+  };
+
+  const showUserData = (isPrompt = false) => {
+    showUserDataOnly = `List of items and prices : \n`;
+    for (let i = 0; i < itemName.length; i++) {
+      showUserDataOnly += `${i + 1}. ${itemName[i]} || Rp. ${itemPrice[
+        i
+      ].toLocaleString()} || ${itemQty[i]} \n`;
+    }
+    if (isPrompt) {
+      alert(showUserDataOnly);
+    }
+  };
+
+  showMainMenu(true);
+
+  do {
+    if (mainMenuInput == 1) {
+      let showAdminMenu = `Admin menu : \n`;
+      for (let i = 0; i < adminMenu.length; i++) {
+        showAdminMenu += `${i + 1}. ${adminMenu[i]} \n`;
+      }
+
+      let adminMenuInput = prompt(showAdminMenu);
+      adminMenuInput = parseInt(adminMenuInput);
+      adminMenuInputIndex = adminMenuInput - 1;
+      if (adminMenuInput == 1) {
+        let addData;
+        let addDataPrice;
+
+        addData = prompt(`Input item name : \n`);
+        addDataPrice = prompt(`Input item price : \n`);
+        parseInt(addDataPrice);
+        addDataQty = prompt(`Input item quantity : \n`);
+        parseInt(addDataQty);
+        itemName.push(addData);
+        itemPrice.push(addDataPrice);
+        itemQty.push(addDataQty);
+      } else if (adminMenuInput == 2) {
+        showAdminDataOnly(true);
+      } else if (adminMenuInput == 3) {
+        showAdminData(true);
+        itemName.splice(adminDataInputIndex, 1);
+        itemPrice.splice(adminDataInputIndex, 1);
+        itemQty.splice(adminDataInputIndex, 1);
+      } else if (adminMenuInput == 4) {
+        showAdminData(true);
+
+        adminEditDataName = prompt(
+          `Change ${itemName[adminDataInputIndex]} to : \n`
+        );
+        adminEditDataPrice = prompt(`Edit item price to : \n`);
+        adminEditDataQty = prompt(`Edit item quantity to : \n`);
+        itemName[adminDataInputIndex] = adminEditDataName;
+        itemPrice[adminDataInputIndex] = adminEditDataPrice;
+        itemQty[adminDataInputIndex] = adminEditDataQty;
+      } else if (adminMenuInput == 5) {
+        showMainMenu(true);
+      }
+    } else if (mainMenuInput == 2) {
+    }
+    let showUserMenu = `User menu : \n`;
+    for (i = 0; i < userMenu.length; i++) {
+      showUserMenu += `${i + 1}. ${userMenu[i]} \n`;
+    }
+    let userMenuInput = prompt(showUserMenu);
+    userMenuInput = parseInt(userMenuInput);
+    userMenuInputIndex = userMenuInput - 1;
+    if (userMenuInput == 1) {
+      let addItem = showUserData(true);
+
+      userItemInput = prompt(`Select the item you want : \n `);
+      userItemInput = parseInt(userItemInput);
+
+      userItemInputIndex = userItemInput - 1;
+
+      userSelectedItem = itemName[userItemInputIndex];
+
+      userItemQty = prompt(`Input the item amount : \n`);
+      userItemQty = parseInt(userItemQty);
+
+      userItemPrice = itemPrice[userItemInputIndex] * userItemQty;
+
+      userCart = `${userSelectedItem} || ${userItemPrice.toLocaleString()} || ${userItemQty} \n`;
+    } else if (userMenuInput == 2) {
+      alert(`Your cart : \n ${userCart}`);
+    } else if (userMenuInput == 3) {
+    }
+  } while (true);
+</script>

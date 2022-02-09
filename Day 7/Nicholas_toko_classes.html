@@ -1,0 +1,271 @@
+<script>
+  // Untuk menyimpan data produk (buku) kita
+  // let products = ["LOTR", "Harry Potter", "Sherlock", "Naruto"];
+  // let productPrices = [10000, 7000, 12000, 15000];
+  // let productQty = [0, 0, 0, 0];
+  // let productBought = [0, 0, 0, 0];
+
+  class Book {
+    constructor(title, price, quantity, bought) {
+      this.title = title;
+      this.price = price;
+      this.quantity = 0;
+      this.bought = 0;
+    }
+    priceTotal() {
+      return this.price * this.quantity;
+    }
+
+    listOfBook() {
+      return `${this.title} || Rp. ${this.price.toLocaleString()} \n`;
+    }
+    showUserCart() {
+      return `${this.title} x ${this.quantity} -> Rp. ${(
+        this.price * this.quantity
+      ).toLocaleString()} \n`;
+    }
+  }
+
+  const tokoBuku = [
+    new Book("LOTR", 10000, 0, 0),
+    new Book("Harry Potter", 7000, 0, 0),
+    new Book("Sherlock", 12000, 0, 0),
+    new Book("Naruto", 15000, 0, 0),
+  ];
+
+  class Report extends Book {
+    constructor(title, price, quantity, bought) {
+      //super is used to call the constructor of the parent class
+      super(title, price, quantity, bought);
+      this.title = title;
+      this.price = price;
+      this.quantity = quantity;
+      this.bought = bought;
+    }
+
+    reportTotalTransaction() {
+      return this.price * this.quantity;
+    }
+
+    transactionHistory() {
+      return `${this.title} x ${this.quantity} -> Rp. ${(
+        this.price * this.quantity
+      ).toLocaleString()} \n`;
+    }
+  }
+
+  const database = [];
+
+  const showMenu = (isPrompt = false) => {
+    let productsList = "";
+
+    for (let i = 0; i < tokoBuku.length; i++) {
+      productsList += `${i + 1}. ${tokoBuku[i].listOfBook()}`;
+    }
+
+    //what will happen if isprompt value is true
+    if (isPrompt) {
+      let userInput = prompt(productsList);
+      userInput = parseInt(userInput);
+
+      let userInputIndex = userInput - 1;
+
+      //when returned, the function will return the index chosen
+      return userInputIndex;
+    }
+    // what will happen if isprompt value is false
+    alert(productsList);
+  };
+
+  const adminAddData = () => {
+    let userInputNewProduct = prompt("Anda mau menambahkan buku apa?");
+
+    let userInputNewPrice = prompt("Berapa harga barang baru anda?");
+
+    //untuk ubah value userinputnewprice dari string menjadi number, we use parseint
+    userInputNewPrice = parseInt(userInputNewPrice);
+
+    // untuk menyimpan data produk baru
+    let newProduct = new Book(userInputNewProduct, userInputNewPrice, 0, 0);
+
+    //to add newproduct object to tokobuku array
+    tokoBuku.push(newProduct);
+
+    alert("Data tertambahkan!");
+  };
+
+  const adminDeleteData = () => {
+    //to get the index number from item, from show menu
+    const userDeleteItemIndex = showMenu(true);
+
+    //to delete an array in given index
+    //.splice has 2 parameter,
+    //first parameter to determine which index will be deleted
+    //second parameter is to determine how many will be deleted
+    tokoBuku.splice(userDeleteItemIndex, 1);
+  };
+
+  //to edit a data in property
+  const adminEditData = () => {
+    const userEditItemIndex = showMenu(true);
+
+    let userEditValue = prompt(
+      `Mau ubah ${tokoBuku[userEditItemIndex].title} menjadi apa?`
+    );
+    let userEditPriceValue = prompt("Harganya berapa?");
+    userEditPriceValue = parseInt(userEditPriceValue);
+
+    //goal is to change productName and price
+    // change the property of productName and price from the item selected from index
+    tokoBuku[userEditItemIndex].title = userEditValue;
+    tokoBuku[userEditItemIndex].price = userEditPriceValue;
+  };
+
+  // User functions
+  const userAddToCart = () => {
+    const userCartIndex = showMenu(true);
+    let totalPrice;
+    let userCartQty = prompt(
+      `Mau beli ${tokoBuku[userCartIndex].title} berapa banyak?`
+    );
+    userCartQty = parseInt(userCartQty);
+
+    //to add item quantity to cart by adding to quantity, and database by adding to bought
+    tokoBuku[userCartIndex].quantity += userCartQty;
+  };
+
+  const userShowCart = (isCheckout = false) => {
+    let userCart = "";
+    totalPrice = 0;
+
+    for (let i = 0; i < tokoBuku.length; i++) {
+      userCart += `${i + 1}. ${tokoBuku[i].showUserCart()}`;
+
+      //to get the total price
+      totalPrice += tokoBuku[i].priceTotal();
+    }
+
+    if (isCheckout) {
+      // Tambah baris untuk total price
+      userCart += `\n Total belanjaan anda adalah Rp. ${totalPrice.toLocaleString()}`;
+
+      //for customer to input their payment
+      let userPayment = prompt(userCart);
+      userPayment = parseInt(userPayment);
+
+      // if the customer overpaid, the change will be stated.
+      if (userPayment > totalPrice) {
+        alert(
+          `Kembalian anda sebesar Rp. ${(
+            userPayment - totalPrice
+          ).toLocaleString()}`
+        );
+        //if the customer pays with exact amount
+      } else if (userPayment === totalPrice) {
+        alert("Terima kasih sudah membayar dengan uang pas");
+
+        //if customer pays with the amount less than total price
+      } else if (userPayment < totalPrice) {
+        alert(
+          `Uang anda kurang Rp. ${(totalPrice - userPayment).toLocaleString()}`
+        );
+      }
+
+      for (let i = 0; i < tokoBuku.length; i++) {
+        //this is used to push the object if quantity value is > 0 and store it in a new empty array (database)
+        //is stored to a new array so the previous transaction wont affected by new/ future changes
+        if (tokoBuku[i].quantity > 0) {
+          //use spread operator to copy object
+
+          database.push(
+            new Report(
+              tokoBuku[i].title,
+              tokoBuku[i].price,
+              tokoBuku[i].quantity,
+              tokoBuku[i].bought
+            )
+          );
+        }
+      }
+      //empty the qty of all items
+      for (let i = 0; i < tokoBuku.length; i++) {
+        tokoBuku[i].quantity = 0;
+      }
+      //to stop the function
+      return;
+    }
+    alert(userCart);
+  };
+
+  do {
+    // Main menu
+    const userMainMenuInput = prompt(`Login sebagai:
+      1. Admin
+      2. User
+      3. Exit`);
+
+    if (userMainMenuInput == "1") {
+      do {
+        const adminMenuInput = prompt(`Menu:
+      1. Tambah data
+      2. Delete data
+      3. Show data
+      4. Edit data
+      5. Show report
+      6. Exit`);
+        // Jika user pilih tambah data
+        if (adminMenuInput == "1") {
+          adminAddData();
+        } else if (adminMenuInput == "2") {
+          adminDeleteData();
+        } else if (adminMenuInput == "3") {
+          showMenu(false);
+        } else if (adminMenuInput == "4") {
+          // Jika user pilih update data
+          adminEditData();
+        } else if (adminMenuInput == "5") {
+          let reportData = "";
+          let totalTransactionAmount = 0;
+
+          //if database = 0 it means customer hasnt check out yet
+          //this condition is to display report when customer has checked out or when there's transasction
+          if (database.length > 0) {
+            let reportData = "";
+            let totalTransactionAmount = 0;
+          }
+
+          for (let i = 0; i < database.length; i++) {
+            reportData += `${i + 1}. ${database[i].transactionHistory()}`;
+
+            totalTransactionAmount += database[i].reportTotalTransaction();
+          }
+          reportData += `The amount of user transaction is = Rp. ${totalTransactionAmount.toLocaleString()}`;
+          alert(reportData);
+        } else if (adminMenuInput == "6") {
+          break;
+        }
+      } while (true);
+    } else if (userMainMenuInput == "2") {
+      // Menu user
+      do {
+        const userMenuInput = prompt(`
+          1. Add to cart
+          2. Show cart
+          3. Checkout
+          4. Back`);
+
+        if (userMenuInput == "1") {
+          userAddToCart();
+        } else if (userMenuInput == "2") {
+          userShowCart();
+        } else if (userMenuInput == "3") {
+          userShowCart(true);
+        } else if (userMenuInput == "4") {
+          break;
+        }
+      } while (true);
+    } else if (userMainMenuInput == "3") {
+      break;
+    }
+  } while (true);
+</script>
